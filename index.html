@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Serviços</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        :root {
+            --primary-color: #1976d2;
+            --primary-dark: #1565c0;
+            --primary-light: #42a5f5;
+            --primary-bg: #e3f2fd;
+            --text-color: #333;
+            --text-light: #666;
+            --text-white: #fff;
+            --border-radius: 12px;
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-color);
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .app-bar {
+            background-color: var(--primary-color);
+            color: var(--text-white);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .app-bar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .app-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 48px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: #fafafa;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: white;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .categories-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            gap: 8px;
+        }
+
+        .category-chip {
+            padding: 8px 16px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+
+        .category-chip.selected {
+            background-color: var(--primary-bg);
+            color: var(--primary-dark);
+            border-color: var(--primary-light);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .filter-button {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-button:hover {
+            background-color: #f9f9f9;
+        }
+
+        .service-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .service-card-content {
+            padding: 16px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .service-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .service-info {
+            flex: 1;
+        }
+
+        .service-name {
+            font-weight: 500;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .service-description {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .service-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .service-detail {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+        }
+
+        .service-detail .material-icons {
+            font-size: 16px;
+        }
+
+        .rating {
+            color: #ffa000;
+        }
+
+        .distance {
+            color: #f44336;
+        }
+
+        .price {
+            color: #4caf50;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 16px;
+            color: var(--text-light);
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-text {
+            font-size: 18px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .modal-content {
+            padding: 16px;
+        }
+
+        .modal-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            cursor: pointer;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .modal-option:last-child {
+            border-bottom: none;
+        }
+
+        .modal-option:hover {
+            background-color: #f9f9f9;
+        }
+
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .profile-category {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+        }
+
+        .info-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .info-card-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        .info-card-content {
+            padding: 16px;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+        }
+
+        .info-row:not(:last-child) {
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .info-icon {
+            color: var(--primary-color);
+        }
+
+        .info-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-title {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .info-value {
+            font-size: 16px;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .contact-button {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border: none;
+            border-radius: var(--border-radius);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .contact-button:hover {
+            opacity: 0.9;
+        }
+
+        .phone-button {
+            background-color: #4caf50;
+        }
+
+        .whatsapp-button {
+            background-color: #25d366;
+        }
+
+        .email-button {
+            background-color: var(--primary-color);
+            width: 100%;
+        }
+
+        .review-item {
+            padding: 12px 0;
+        }
+
+        .review-item:not(:last-child) {
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .reviewer-name {
+            font-weight: 500;
+        }
+
+        .review-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .review-comment {
+            color: var(--text-light);
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            cursor: pointer;
+        }
+
+        .settings-item:not(:last-child) {
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .settings-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: var(--transition);
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: var(--transition);
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .logout-button {
+            width: 100%;
+            padding: 16px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 24px;
+            }
+            
+            .service-card-content {
+                padding: 20px;
+            }
+            
+            .profile-header {
+                padding: 24px;
+            }
+            
+            .info-card-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela Principal - Busca de Serviços -->
+    <div id="main-screen">
+        <div class="app-bar">
+            <div class="app-bar-content">
+                <h1 class="app-title">Click Serviços</h1>
+                <button class="icon-button" id="profile-button">
+                    <span class="material-icons">person</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="search-bar">
+                <span class="material-icons search-icon">search</span>
+                <input type="text" class="search-input" id="search-input" placeholder="Buscar serviços (ex: eletricista, diarista...)">
+            </div>
+
+            <div class="categories-container" id="categories-container">
+                <!-- Categorias serão inseridas via JavaScript -->
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-button" id="sort-button">
+                    <span class="material-icons">sort</span>
+                    <span>Ordenar</span>
+                </button>
+                <button class="filter-button" id="filter-button">
+                    <span class="material-icons">filter_list</span>
+                    <span>Filtrar</span>
+                </button>
+            </div>
+
+            <div id="services-list">
+                <!-- Lista de serviços será inserida via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de Perfil do Prestador -->
+    <div id="provider-profile-screen" class="hidden">
+        <div class="app-bar">
+            <div class="app-bar-content">
+                <button class="icon-button" id="back-from-provider">
+                    <span class="material-icons">arrow_back</span>
+                </button>
+                <h1 class="app-title">Perfil do Prestador</h1>
+                <div style="width: 48px;"></div> <!-- Espaço para centralizar o título -->
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <span class="material-icons" style="font-size: 50px;">person</span>
+                </div>
+                <h2 class="profile-name" id="provider-name">Nome do Prestador</h2>
+                <div class="profile-category" id="provider-category">Categoria</div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-content">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <span class="material-icons" style="color: var(--primary-color); font-size: 30px;">star</span>
+                            <span class="stat-label">Avaliação</span>
+                            <span class="stat-value" id="provider-rating">4.8</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="material-icons" style="color: var(--primary-color); font-size: 30px;">location_on</span>
+                            <span class="stat-label">Distância</span>
+                            <span class="stat-value" id="provider-distance">2.5 km</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="material-icons" style="color: var(--primary-color); font-size: 30px;">work</span>
+                            <span class="stat-label">Serviços</span>
+                            <span class="stat-value">50+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">Sobre o serviço</div>
+                <div class="info-card-content">
+                    <p id="provider-description">Descrição do serviço</p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-content">
+                    <div class="info-row">
+                        <span class="material-icons info-icon">attach_money</span>
+                        <div class="info-content">
+                            <span class="info-value" id="provider-price">Preço médio: R$80,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">Entre em contato</div>
+                <div class="info-card-content">
+                    <div class="contact-buttons">
+                        <button class="contact-button phone-button">
+                            <span class="material-icons">phone</span>
+                            <span>Ligar</span>
+                        </button>
+                        <button class="contact-button whatsapp-button">
+                            <span class="material-icons">chat</span>
+                            <span>WhatsApp</span>
+                        </button>
+                    </div>
+                    <button class="contact-button email-button">
+                        <span class="material-icons">email</span>
+                        <span>Enviar E-mail</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">Avaliações</div>
+                <div class="info-card-content">
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="reviewer-name">Maria Silva</span>
+                            <div class="review-rating">
+                                <span class="material-icons rating">star</span>
+                                <span>5.0</span>
+                            </div>
+                        </div>
+                        <p class="review-comment">Ótimo serviço! Muito profissional.</p>
+                    </div>
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="reviewer-name">João Santos</span>
+                            <div class="review-rating">
+                                <span class="material-icons rating">star</span>
+                                <span>4.5</span>
+                            </div>
+                        </div>
+                        <p class="review-comment">Resolveu meu problema rapidamente.</p>
+                    </div>
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="reviewer-name">Ana Oliveira</span>
+                            <div class="review-rating">
+                                <span class="material-icons rating">star</span>
+                                <span>4.0</span>
+                            </div>
+                        </div>
+                        <p class="review-comment">Preço justo e bom atendimento.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de Perfil do Usuário -->
+    <div id="user-profile-screen" class="hidden">
+        <div class="app-bar">
+            <div class="app-bar-content">
+                <button class="icon-button" id="back-from-user">
+                    <span class="material-icons">arrow_back</span>
+                </button>
+                <h1 class="app-title">Meu Perfil</h1>
+                <button class="icon-button" id="edit-profile">
+                    <span class="material-icons">edit</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="info-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <span class="material-icons" style="font-size: 50px;">person</span>
+                    </div>
+                    <h2 class="profile-name" id="user-name">Ana Oliveira</h2>
+                    <p id="user-email">ana.oliveira@email.com</p>
+                    <div class="stats-container" style="margin-top: 16px;">
+                        <div class="stat-item">
+                            <span class="stat-value">12</span>
+                            <span class="stat-label">Serviços</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Avaliações</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">Jan 2024</span>
+                            <span class="stat-label">Membro desde</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">Informações de Contato</div>
+                <div class="info-card-content">
+                    <div class="info-row">
+                        <span class="material-icons info-icon">phone</span>
+                        <div class="info-content">
+                            <span class="info-title">Telefone</span>
+                            <span class="info-value" id="user-phone">+5511999999999</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <span class="material-icons info-icon">email</span>
+                        <div class="info-content">
+                            <span class="info-title">E-mail</span>
+                            <span class="info-value" id="user-email-value">ana.oliveira@email.com</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <span class="material-icons info-icon">location_on</span>
+                        <div class="info-content">
+                            <span class="info-title">Localização</span>
+                            <span class="info-value" id="user-location">São Paulo, SP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">Serviços Recentes</div>
+                <div class="info-card-content">
+                    <div class="info-row">
+                        <div class="info-content" style="flex: 1;">
+                            <span class="info-value">Eletricista - João Silva</span>
+                            <span class="info-title">15 Mar 2024</span>
+                        </div>
+                        <div class="review-rating">
+                            <span class="material-icons rating">star</span>
+                            <span>4.5</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-content" style="flex: 1;">
+                            <span class="info-value">Diarista - Maria Santos</span>
+                            <span class="info-title">10 Mar 2024</span>
+                        </div>
+                        <div class="review-rating">
+                            <span class="material-icons rating">star</span>
+                            <span>5.0</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-content" style="flex: 1;">
+                            <span class="info-value">Encanador - Carlos Oliveira</span>
+                            <span class="info-title">05 Mar 2024</span>
+                        </div>
+                        <div class="review-rating">
+                            <span class="material-icons rating">star</span>
+                            <span>4.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">Configurações</div>
+                <div class="info-card-content">
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <span class="material-icons info-icon">notifications</span>
+                            <span>Notificações</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <span class="material-icons info-icon">location_on</span>
+                            <span>Compartilhar localização</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <span class="material-icons info-icon">security</span>
+                            <span>Privacidade</span>
+                        </div>
+                        <span class="material-icons" style="color: var(--text-light);">chevron_right</span>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <span class="material-icons info-icon">help</span>
+                            <span>Ajuda e Suporte</span>
+                        </div>
+                        <span class="material-icons" style="color: var(--text-light);">chevron_right</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="logout-button" id="logout-button">Sair da Conta</button>
+        </div>
+    </div>
+
+    <!-- Modal de Ordenação -->
+    <div id="sort-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Ordenar por</h2>
+                <button class="modal-close" id="close-sort-modal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div class="modal-option" data-sort="rating">
+                    <span class="material-icons">star</span>
+                    <span>Melhor Avaliados</span>
+                </div>
+                <div class="modal-option" data-sort="distance">
+                    <span class="material-icons">location_on</span>
+                    <span>Mais Próximos</span>
+                </div>
+                <div class="modal-option" data-sort="price">
+                    <span class="material-icons">attach_money</span>
+                    <span>Menor Preço</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Filtros -->
+    <div id="filter-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Filtros Avançados</h2>
+                <button class="modal-close" id="close-filter-modal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal-content">
+                <p>Filtros adicionais em desenvolvimento...</p>
+            </div>
+            <div class="modal-content" style="display: flex; justify-content: flex-end; padding-top: 0;">
+                <button class="contact-button" style="background-color: var(--primary-color);" id="close-filter-button">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição de Perfil -->
+    <div id="edit-profile-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Editar Perfil</h2>
+                <button class="modal-close" id="close-edit-modal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div style="margin-bottom: 16px;">
+                    <label for="edit-name" style="display: block; margin-bottom: 4px; font-weight: 500;">Nome</label>
+                    <input type="text" id="edit-name" class="search-input" style="padding: 12px 16px;">
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <label for="edit-email" style="display: block; margin-bottom: 4px; font-weight: 500;">E-mail</label>
+                    <input type="email" id="edit-email" class="search-input" style="padding: 12px 16px;">
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <label for="edit-phone" style="display: block; margin-bottom: 4px; font-weight: 500;">Telefone</label>
+                    <input type="tel" id="edit-phone" class="search-input" style="padding: 12px 16px;">
+                </div>
+            </div>
+            <div class="modal-content" style="display: flex; justify-content: flex-end; gap: 8px; padding-top: 0;">
+                <button class="contact-button" style="background-color: #6c757d;" id="cancel-edit">Cancelar</button>
+                <button class="contact-button" style="background-color: var(--primary-color);" id="save-profile">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Logout -->
+    <div id="logout-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Sair da Conta</h2>
+                <button class="modal-close" id="close-logout-modal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal-content">
+                <p>Tem certeza que deseja sair da sua conta?</p>
+            </div>
+            <div class="modal-content" style="display: flex; justify-content: flex-end; gap: 8px; padding-top: 0;">
+                <button class="contact-button" style="background-color: #6c757d;" id="cancel-logout">Cancelar</button>
+                <button class="contact-button" style="background-color: #f44336;" id="confirm-logout">Sair</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados dos serviços
+        const servicos = [
+            {
+                id: '1',
+                nome: 'João Silva - Eletricista',
+                categoria: 'Elétrica',
+                descricao: 'Instalações elétricas residenciais e comerciais',
+                avaliacao: 4.8,
+                distancia: 2.5,
+                preco: 80.00,
+                telefone: '+5511999999999',
+                whatsapp: '+5511999999999',
+                email: 'joao.silva@email.com',
+            },
+            {
+                id: '2',
+                nome: 'Maria Santos - Diarista',
+                categoria: 'Limpeza',
+                descricao: 'Limpeza residencial e comercial',
+                avaliacao: 4.9,
+                distancia: 1.2,
+                preco: 60.00,
+                telefone: '+5511888888888',
+                whatsapp: '+5511888888888',
+                email: 'maria.santos@email.com',
+            },
+            {
+                id: '3',
+                nome: 'Carlos Oliveira - Encanador',
+                categoria: 'Encanamento',
+                descricao: 'Reparos hidráulicos e instalações',
+                avaliacao: 4.7,
+                distancia: 3.1,
+                preco: 90.00,
+                telefone: '+5511777777777',
+                whatsapp: '+5511777777777',
+                email: 'carlos.oliveira@email.com',
+            },
+            {
+                id: '4',
+                nome: 'Ana Souza - Professora de Inglês',
+                categoria: 'Aulas',
+                descricao: 'Aulas particulares de inglês para todos os níveis',
+                avaliacao: 4.9,
+                distancia: 0.8,
+                preco: 75.00,
+                telefone: '+5511987654321',
+                whatsapp: '+5511987654321',
+                email: 'ana.souza@email.com',
+            },
+            {
+                id: '5',
+                nome: 'Pedro Mendes - Pedreiro',
+                categoria: 'Construção',
+                descricao: 'Pequenas reformas e construções',
+                avaliacao: 4.5,
+                distancia: 5.0,
+                preco: 120.00,
+                telefone: '+5511912345678',
+                whatsapp: '+5511912345678',
+                email: 'pedro.mendes@email.com',
+            },
+        ];
+
+        // Dados do usuário
+        const usuario = {
+            nome: 'Ana Oliveira',
+            email: 'ana.oliveira@email.com',
+            telefone: '+5511999999999',
+            localizacao: 'São Paulo, SP',
+            servicosContratados: 12,
+            membroDesde: '2024-01-15',
+        };
+
+        // Estado da aplicação
+        let servicosFiltrados = [...servicos];
+        let categoriaSelecionada = 'Todas';
+        let termoBusca = '';
+        let ordenacaoAtual = '';
+
+        // Elementos DOM
+        const mainScreen = document.getElementById('main-screen');
+        const providerProfileScreen = document.getElementById('provider-profile-screen');
+        const userProfileScreen = document.getElementById('user-profile-screen');
+        const categoriesContainer = document.getElementById('categories-container');
+        const servicesList = document.getElementById('services-list');
+        const searchInput = document.getElementById('search-input');
+        const sortButton = document.getElementById('sort-button');
+        const filterButton = document.getElementById('filter-button');
+        const profileButton = document.getElementById('profile-button');
+        const backFromProvider = document.getElementById('back-from-provider');
+        const backFromUser = document.getElementById('back-from-user');
+        const editProfile = document.getElementById('edit-profile');
+        const logoutButton = document.getElementById('logout-button');
+        const sortModal = document.getElementById('sort-modal');
+        const closeSortModal = document.getElementById('close-sort-modal');
+        const filterModal = document.getElementById('filter-modal');
+        const closeFilterModal = document.getElementById('close-filter-modal');
+        const closeFilterButton = document.getElementById('close-filter-button');
+        const editProfileModal = document.getElementById('edit-profile-modal');
+        const closeEditModal = document.getElementById('close-edit-modal');
+        const cancelEdit = document.getElementById('cancel-edit');
+        const saveProfile = document.getElementById('save-profile');
+        const logoutModal = document.getElementById('logout-modal');
+        const closeLogoutModal = document.getElementById('close-logout-modal');
+        const cancelLogout = document.getElementById('cancel-logout');
+        const confirmLogout = document.getElementById('confirm-logout');
+
+        // Categorias
+        const categorias = ['Todas', 'Elétrica', 'Encanamento', 'Limpeza', 'Construção', 'Transporte', 'Aulas'];
+
+        // Inicialização
+        function init() {
+            renderCategorias();
+            renderServicos();
+            setupEventListeners();
+        }
+
+        // Renderizar categorias
+        function renderCategorias() {
+            categoriesContainer.innerHTML = '';
+            
+            categorias.forEach(categoria => {
+                const chip = document.createElement('div');
+                chip.className = `category-chip ${categoria === categoriaSelecionada ? 'selected' : ''}`;
+                chip.textContent = categoria;
+                chip.addEventListener('click', () => {
+                    categoriaSelecionada = categoria;
+                    filtrarServicos();
+                    renderCategorias();
+                });
+                
+                categoriesContainer.appendChild(chip);
+            });
+        }
+
+        // Renderizar serviços
+        function renderServicos() {
+            servicesList.innerHTML = '';
+            
+            if (servicosFiltrados.length === 0) {
+                servicesList.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-icons empty-state-icon">search_off</span>
+                        <p class="empty-state-text">Nenhum serviço encontrado</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            servicosFiltrados.forEach(servico => {
+                const card = document.createElement('div');
+                card.className = 'service-card';
+                card.innerHTML = `
+                    <div class="service-card-content">
+                        <div class="service-avatar">
+                            <span class="material-icons">person</span>
+                        </div>
+                        <div class="service-info">
+                            <h3 class="service-name">${servico.nome}</h3>
+                            <p class="service-description">${servico.descricao}</p>
+                            <div class="service-details">
+                                <div class="service-detail rating">
+                                    <span class="material-icons">star</span>
+                                    <span>${servico.avaliacao.toFixed(1)}</span>
+                                </div>
+                                <div class="service-detail distance">
+                                    <span class="material-icons">location_on</span>
+                                    <span>${servico.distancia.toFixed(1)} km</span>
+                                </div>
+                                <div class="service-detail price">
+                                    <span class="material-icons">attach_money</span>
+                                    <span>R$${servico.preco.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="material-icons" style="color: #ddd; align-self: center;">arrow_forward_ios</span>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => {
+                    abrirPerfilPrestador(servico);
+                });
+                
+                servicesList.appendChild(card);
+            });
+        }
+
+        // Filtrar serviços
+        function filtrarServicos() {
+            servicosFiltrados = servicos.filter(servico => {
+                const correspondeCategoria = categoriaSelecionada === 'Todas' || 
+                                           servico.categoria === categoriaSelecionada;
+                
+                const correspondeBusca = servico.nome.toLowerCase().includes(termoBusca) ||
+                                       servico.descricao.toLowerCase().includes(termoBusca) ||
+                                       servico.categoria.toLowerCase().includes(termoBusca);
+                
+                return correspondeCategoria && correspondeBusca;
+            });
+            
+            aplicarOrdenacao();
+            renderServicos();
+        }
+
+        // Aplicar ordenação
+        function aplicarOrdenacao() {
+            if (ordenacaoAtual === 'rating') {
+                servicosFiltrados.sort((a, b) => b.avaliacao - a.avaliacao);
+            } else if (ordenacaoAtual === 'distance') {
+                servicosFiltrados.sort((a, b) => a.distancia - b.distancia);
+            } else if (ordenacaoAtual === 'price') {
+                servicosFiltrados.sort((a, b) => a.preco - b.preco);
+            }
+        }
+
+        // Abrir perfil do prestador
+        function abrirPerfilPrestador(servico) {
+            document.getElementById('provider-name').textContent = servico.nome;
+            document.getElementById('provider-category').textContent = servico.categoria;
+            document.getElementById('provider-rating').textContent = servico.avaliacao.toFixed(1);
+            document.getElementById('provider-distance').textContent = `${servico.distancia.toFixed(1)} km`;
+            document.getElementById('provider-description').textContent = servico.descricao;
+            document.getElementById('provider-price').textContent = `Preço médio: R$${servico.preco.toFixed(2)}`;
+            
+            mainScreen.classList.add('hidden');
+            providerProfileScreen.classList.remove('hidden');
+        }
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Busca
+            searchInput.addEventListener('input', (e) => {
+                termoBusca = e.target.value.toLowerCase();
+                filtrarServicos();
+            });
+            
+            // Navegação
+            sortButton.addEventListener('click', () => {
+                sortModal.classList.remove('hidden');
+            });
+            
+            filterButton.addEventListener('click', () => {
+                filterModal.classList.remove('hidden');
+            });
+            
+            profileButton.addEventListener('click', () => {
+                document.getElementById('user-name').textContent = usuario.nome;
+                document.getElementById('user-email').textContent = usuario.email;
+                document.getElementById('user-phone').textContent = usuario.telefone;
+                document.getElementById('user-email-value').textContent = usuario.email;
+                document.getElementById('user-location').textContent = usuario.localizacao;
+                
+                mainScreen.classList.add('hidden');
+                userProfileScreen.classList.remove('hidden');
+            });
+            
+            backFromProvider.addEventListener('click', () => {
+                providerProfileScreen.classList.add('hidden');
+                mainScreen.classList.remove('hidden');
+            });
+            
+            backFromUser.addEventListener('click', () => {
+                userProfileScreen.classList.add('hidden');
+                mainScreen.classList.remove('hidden');
+            });
+            
+            editProfile.addEventListener('click', () => {
+                document.getElementById('edit-name').value = usuario.nome;
+                document.getElementById('edit-email').value = usuario.email;
+                document.getElementById('edit-phone').value = usuario.telefone;
+                
+                editProfileModal.classList.remove('hidden');
+            });
+            
+            logoutButton.addEventListener('click', () => {
+                logoutModal.classList.remove('hidden');
+            });
+            
+            // Modais
+            closeSortModal.addEventListener('click', () => {
+                sortModal.classList.add('hidden');
+            });
+            
+            closeFilterModal.addEventListener('click', () => {
+                filterModal.classList.add('hidden');
+            });
+            
+            closeFilterButton.addEventListener('click', () => {
+                filterModal.classList.add('hidden');
+            });
+            
+            closeEditModal.addEventListener('click', () => {
+                editProfileModal.classList.add('hidden');
+            });
+            
+            cancelEdit.addEventListener('click', () => {
+                editProfileModal.classList.add('hidden');
+            });
+            
+            saveProfile.addEventListener('click', () => {
+                usuario.nome = document.getElementById('edit-name').value;
+                usuario.email = document.getElementById('edit-email').value;
+                usuario.telefone = document.getElementById('edit-phone').value;
+                
+                document.getElementById('user-name').textContent = usuario.nome;
+                document.getElementById('user-email').textContent = usuario.email;
+                document.getElementById('user-phone').textContent = usuario.telefone;
+                document.getElementById('user-email-value').textContent = usuario.email;
+                
+                editProfileModal.classList.add('hidden');
+            });
+            
+            closeLogoutModal.addEventListener('click', () => {
+                logoutModal.classList.add('hidden');
+            });
+            
+            cancelLogout.addEventListener('click', () => {
+                logoutModal.classList.add('hidden');
+            });
+            
+            confirmLogout.addEventListener('click', () => {
+                // Aqui implementaria o logout real
+                alert('Logout realizado com sucesso!');
+                logoutModal.classList.add('hidden');
+            });
+            
+            // Opções de ordenação
+            document.querySelectorAll('.modal-option[data-sort]').forEach(option => {
+                option.addEventListener('click', () => {
+                    ordenacaoAtual = option.getAttribute('data-sort');
+                    aplicarOrdenacao();
+                    renderServicos();
+                    sortModal.classList.add('hidden');
+                });
+            });
+            
+            // Fechar modais clicando fora
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
+            });
+        }
+
+        // Inicializar a aplicação
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
