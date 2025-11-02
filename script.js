@@ -1,4 +1,3 @@
-// ...existing code...
 // Dados dos serviços
 const servicos = [
     {
@@ -9,9 +8,9 @@ const servicos = [
         avaliacao: 4.8,
         distancia: 2.5,
         preco: 80.00,
-        telefone: '+5511999999999',
-        whatsapp: '+5511999999999',
-        email: 'joao.silva@email.com',
+        telefone: '86994194571',
+        whatsapp: '86994194571',
+        email: 'guilhermebarbosa556@email.com',
     },
     {
         id: '2',
@@ -21,9 +20,9 @@ const servicos = [
         avaliacao: 4.9,
         distancia: 1.2,
         preco: 60.00,
-        telefone: '+5511888888888',
-        whatsapp: '+5511888888888',
-        email: 'maria.santos@email.com',
+        telefone: '86994194571',
+        whatsapp: '86994194571',
+        email: 'guilhermebarbosa556@email.com',
     },
     {
         id: '3',
@@ -77,6 +76,7 @@ const usuario = {
 let servicosFiltrados = [...servicos];
 let termoBusca = '';
 let ordenacaoAtual = '';
+let prestadorAtual = null;
 
 // Elementos DOM
 const mainScreen = document.getElementById('main-screen');
@@ -104,6 +104,32 @@ const logoutModal = document.getElementById('logout-modal');
 const closeLogoutModal = document.getElementById('close-logout-modal');
 const cancelLogout = document.getElementById('cancel-logout');
 const confirmLogout = document.getElementById('confirm-logout');
+const phoneButton = document.getElementById('phone-button');
+const whatsappButton = document.getElementById('whatsapp-button');
+const emailButton = document.getElementById('email-button');
+
+// Funções de contato
+function fazerLigacao(telefone) {
+    const numeroLimpo = telefone.replace(/[^\d+]/g, '');
+    
+    if (confirm(`Deseja ligar para ${numeroLimpo}?`)) {
+        window.location.href = `tel:${numeroLimpo}`;
+    }
+}
+
+function abrirWhatsApp(telefone, mensagem = 'Olá, gostaria de solicitar seu serviço!') {
+    const numeroLimpo = telefone.replace(/[^\d+]/g, '');
+    const mensagemCodificada = encodeURIComponent(mensagem);
+    
+    window.open(`https://wa.me/${numeroLimpo}?text=${mensagemCodificada}`, '_blank');
+}
+
+function enviarEmail(email, assunto = 'Solicitação de Serviço', corpo = 'Olá, gostaria de solicitar seu serviço!') {
+    const assuntoCodificado = encodeURIComponent(assunto);
+    const corpoCodificado = encodeURIComponent(corpo);
+    
+    window.location.href = `mailto:${email}?subject=${assuntoCodificado}&body=${corpoCodificado}`;
+}
 
 // Inicialização
 function init() {
@@ -163,7 +189,7 @@ function renderServicos() {
     });
 }
 
-// Filtrar serviços (sem categorias)
+// Filtrar serviços
 function filtrarServicos() {
     const busca = termoBusca.trim().toLowerCase();
     
@@ -194,6 +220,8 @@ function aplicarOrdenacao() {
 
 // Abrir perfil do prestador
 function abrirPerfilPrestador(servico) {
+    prestadorAtual = servico;
+    
     document.getElementById('provider-name').textContent = servico.nome;
     document.getElementById('provider-category').textContent = servico.categoria;
     document.getElementById('provider-rating').textContent = servico.avaliacao.toFixed(1);
@@ -255,6 +283,34 @@ function setupEventListeners() {
         logoutModal.classList.remove('hidden');
     });
     
+    // Botões de contato
+    phoneButton.addEventListener('click', () => {
+        if (prestadorAtual && prestadorAtual.telefone) {
+            fazerLigacao(prestadorAtual.telefone);
+        } else {
+            alert('Número de telefone não disponível');
+        }
+    });
+    
+    whatsappButton.addEventListener('click', () => {
+        if (prestadorAtual && prestadorAtual.whatsapp) {
+            const mensagem = `Olá ${prestadorAtual.nome.split(' - ')[0]}, gostaria de solicitar seu serviço de ${prestadorAtual.categoria}!`;
+            abrirWhatsApp(prestadorAtual.whatsapp, mensagem);
+        } else {
+            alert('Número do WhatsApp não disponível');
+        }
+    });
+    
+    emailButton.addEventListener('click', () => {
+        if (prestadorAtual && prestadorAtual.email) {
+            const assunto = `Solicitação de Serviço - ${prestadorAtual.categoria}`;
+            const corpo = `Olá ${prestadorAtual.nome.split(' - ')[0]},\n\nGostaria de solicitar seu serviço de ${prestadorAtual.categoria}.\n\nAtenciosamente.`;
+            enviarEmail(prestadorAtual.email, assunto, corpo);
+        } else {
+            alert('E-mail não disponível');
+        }
+    });
+    
     // Modais
     closeSortModal.addEventListener('click', () => {
         sortModal.classList.add('hidden');
@@ -298,7 +354,6 @@ function setupEventListeners() {
     });
     
     confirmLogout.addEventListener('click', () => {
-        // Aqui implementaria o logout real
         alert('Logout realizado com sucesso!');
         logoutModal.classList.add('hidden');
     });

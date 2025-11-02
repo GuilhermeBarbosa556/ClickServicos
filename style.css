@@ -1,4 +1,3 @@
-/* ...existing code... */
 :root {
     --primary-color: #1976d2;
     --primary-dark: #1565c0;
@@ -99,8 +98,6 @@ body {
     transform: translateY(-50%);
     color: var(--text-light);
 }
-
-/* categorias removidas (styles .categories-container e .category-chip apagados) */
 
 .filter-buttons {
     display: flex;
