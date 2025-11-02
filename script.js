@@ -32,9 +32,9 @@ const servicos = [
         avaliacao: 4.7,
         distancia: 3.1,
         preco: 90.00,
-        telefone: '+5511777777777',
-        whatsapp: '+5511777777777',
-        email: 'carlos.oliveira@email.com',
+        telefone: '86994194571',
+        whatsapp: '86994194571',
+        email: 'guilhermebarbosa556@email.com',
     },
     {
         id: '4',
@@ -44,9 +44,9 @@ const servicos = [
         avaliacao: 4.9,
         distancia: 0.8,
         preco: 75.00,
-        telefone: '+5511987654321',
-        whatsapp: '+5511987654321',
-        email: 'ana.souza@email.com',
+        telefone: '86994194571',
+        whatsapp: '86994194571',
+        email: 'guilhermebarbosa556@email.com',
     },
     {
         id: '5',
@@ -56,9 +56,9 @@ const servicos = [
         avaliacao: 4.5,
         distancia: 5.0,
         preco: 120.00,
-        telefone: '+5511912345678',
-        whatsapp: '+5511912345678',
-        email: 'pedro.mendes@email.com',
+        telefone: '86994194571',
+        whatsapp: '86994194571',
+        email: 'guilhermebarbosa556@email.com',
     },
 ];
 
