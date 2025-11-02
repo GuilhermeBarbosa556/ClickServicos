@@ -64,12 +64,12 @@ const servicos = [
 
 // Dados do usuário
 const usuario = {
-    nome: 'Ana Oliveira',
-    email: 'ana.oliveira@email.com',
-    telefone: '+5511999999999',
-    localizacao: 'São Paulo, SP',
+    nome: 'Guilherme Barbosa',
+    email: 'guilhermebarbosa556@email.com',
+    telefone: '86994194571',
+    localizacao: 'Hugo Napoleão, PI',
     servicosContratados: 12,
-    membroDesde: '2024-01-15',
+    membroDesde: '2025-01-01',
 };
 
 // Estado da aplicação
